@@ -24,6 +24,9 @@ python3 task.py add "Finish Report" --project Work --priority High
 
 # Recurring Task (Daily, Weekly, etc.)
 python3 task.py add "Daily Standup" --recurrence daily
+
+# With Due Date
+python3 task.py add "Submit Assignment" --due-date 2023-12-31
 ```
 
 ### List Tasks
@@ -51,6 +54,9 @@ python3 task.py update <id> --recurrence weekly
 # Relist a Task (Move from Done -> Pending)
 # This increments the 'Relist' counter
 python3 task.py update <id> --status pending
+
+# Update Due Date
+python3 task.py update <id> --due-date 2024-01-15
 ```
 
 ### Complete Task

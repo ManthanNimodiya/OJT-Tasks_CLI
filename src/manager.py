@@ -8,12 +8,12 @@ class TaskManager:
         self.storage = storage
         self.tasks = self.storage.load_tasks()
 
-    def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None) -> Task:
+    def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None, due_date: Optional[str] = None) -> Task:
         new_id = 1
         if self.tasks:
             new_id = max(t.id for t in self.tasks) + 1
         
-        task = Task(id=new_id, title=title, project=project, priority=priority, recurrence=recurrence)
+        task = Task(id=new_id, title=title, project=project, priority=priority, recurrence=recurrence, due_date=due_date)
         self.tasks.append(task)
         self.storage.save_tasks(self.tasks)
         return task
@@ -26,7 +26,7 @@ class TaskManager:
             filtered_tasks = [t for t in filtered_tasks if t.priority == priority]
         return filtered_tasks
 
-    def update_task(self, task_id: int, title: Optional[str] = None, project: Optional[str] = None, priority: Optional[str] = None, recurrence: Optional[str] = None, status: Optional[str] = None) -> Optional[Task]:
+    def update_task(self, task_id: int, title: Optional[str] = None, project: Optional[str] = None, priority: Optional[str] = None, recurrence: Optional[str] = None, status: Optional[str] = None, due_date: Optional[str] = None) -> Optional[Task]:
         for task in self.tasks:
             if task.id == task_id:
                 if title:
@@ -43,6 +43,8 @@ class TaskManager:
                         task.relist_count += 1
                         task.completed_at = None
                     task.status = status
+                if due_date:
+                    task.due_date = due_date
                 
                 self.storage.save_tasks(self.tasks)
                 return task
@@ -68,7 +70,8 @@ class TaskManager:
                         title=task.title,
                         project=task.project,
                         priority=task.priority,
-                        recurrence=task.recurrence
+                        recurrence=task.recurrence,
+                        due_date=task.due_date
                     )
                 
                 self.storage.save_tasks(self.tasks)

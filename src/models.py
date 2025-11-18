@@ -13,6 +13,7 @@ class Task:
     relist_count: int = 0
     created_at: str = "" 
     completed_at: Optional[str] = None
+    due_date: Optional[str] = None
 
     def __post_init__(self):
         if not self.created_at:

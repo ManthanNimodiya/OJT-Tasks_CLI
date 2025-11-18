@@ -16,6 +16,7 @@ def main(storage_path: str):
     add_parser.add_argument("--project", help="Project name")
     add_parser.add_argument("--priority", choices=["Low", "Medium", "High"], default="Medium", help="Task priority")
     add_parser.add_argument("--recurrence", help="Recurrence pattern (e.g., daily, weekly)")
+    add_parser.add_argument("--due-date", help="Due date (YYYY-MM-DD)")
 
     # Update command
     update_parser = subparsers.add_parser("update", help="Update a task")
@@ -25,6 +26,7 @@ def main(storage_path: str):
     update_parser.add_argument("--priority", choices=["Low", "Medium", "High"], help="New priority")
     update_parser.add_argument("--recurrence", help="New recurrence")
     update_parser.add_argument("--status", choices=["pending", "done"], help="New status")
+    update_parser.add_argument("--due-date", help="New due date (YYYY-MM-DD)")
 
     # List command
     list_parser = subparsers.add_parser("list", help="List tasks")
@@ -42,7 +44,7 @@ def main(storage_path: str):
     args = parser.parse_args()
 
     if args.command == "add":
-        task = manager.add_task(args.title, args.project, args.priority, args.recurrence)
+        task = manager.add_task(args.title, args.project, args.priority, args.recurrence, args.due_date)
         print(f"Task added: {task.id} - {task.title}")
     
     elif args.command == "list":
@@ -50,12 +52,13 @@ def main(storage_path: str):
         if not tasks:
             print("No tasks found.")
         else:
-            print(f"{'ID':<5} {'Title':<30} {'Project':<15} {'Priority':<10} {'Status':<10} {'Recurrence':<12} {'Relist':<6}")
-            print("-" * 100)
+            print(f"{'ID':<5} {'Title':<30} {'Project':<15} {'Priority':<10} {'Status':<10} {'Recurrence':<12} {'Due Date':<12} {'Relist':<6}")
+            print("-" * 115)
             for task in tasks:
                 project = task.project if task.project else ""
                 recurrence = task.recurrence if task.recurrence else ""
-                print(f"{task.id:<5} {task.title[:28]:<30} {project[:13]:<15} {task.priority:<10} {task.status:<10} {recurrence[:10]:<12} {task.relist_count:<6}")
+                due_date = task.due_date if task.due_date else ""
+                print(f"{task.id:<5} {task.title[:28]:<30} {project[:13]:<15} {task.priority:<10} {task.status:<10} {recurrence[:10]:<12} {due_date:<12} {task.relist_count:<6}")
 
     elif args.command == "update":
         task = manager.update_task(
@@ -64,7 +67,8 @@ def main(storage_path: str):
             project=args.project, 
             priority=args.priority, 
             recurrence=args.recurrence, 
-            status=args.status
+            status=args.status,
+            due_date=args.due_date
         )
         if task:
             print(f"Task {task.id} updated.")

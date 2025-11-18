@@ -39,5 +39,14 @@ class TestTaskManager(unittest.TestCase):
         self.assertEqual(len(tasks_a), 1)
         self.assertEqual(tasks_a[0].title, "Task 1")
 
+    def test_add_task_with_due_date(self):
+        task = self.manager.add_task("Due Task", due_date="2023-12-31")
+        self.assertEqual(task.due_date, "2023-12-31")
+        
+        # Verify persistence
+        new_manager = TaskManager(Storage(self.test_file))
+        loaded_task = new_manager.tasks[0]
+        self.assertEqual(loaded_task.due_date, "2023-12-31")
+
 if __name__ == "__main__":
     unittest.main()
