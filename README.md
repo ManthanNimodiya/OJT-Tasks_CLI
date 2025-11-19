@@ -8,6 +8,7 @@ A command-line interface (CLI) tool for managing tasks with support for projects
 - **List Tasks**: View all tasks, or filter by project/priority.
 - **Complete Tasks**: Mark tasks as done.
 - **Delete Tasks**: Remove tasks permanently.
+- **Export Tasks**: Export tasks to a CSV file.
 - **Persistence**: Tasks are saved to a JSON file.
 
 ## Usage
@@ -70,6 +71,17 @@ python3 task.py done <id>
 Permanently remove a task.
 ```bash
 python3 task.py delete <id>
+```
+
+
+### Export Tasks
+Export tasks to a CSV file.
+```bash
+# Export to default file (tasks.csv)
+python3 task.py export
+
+# Export to specific file
+python3 task.py export my_tasks.csv
 ```
 
 ## Running Tests

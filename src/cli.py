@@ -41,6 +41,10 @@ def main(storage_path: str):
     done_parser = subparsers.add_parser("done", help="Mark task as done")
     done_parser.add_argument("id", type=int, help="Task ID")
 
+    # Export command
+    export_parser = subparsers.add_parser("export", help="Export tasks to CSV")
+    export_parser.add_argument("filename", nargs="?", default="tasks.csv", help="Output CSV filename (default: tasks.csv)")
+
     args = parser.parse_args()
 
     if args.command == "add":
@@ -87,5 +91,15 @@ def main(storage_path: str):
         else:
             print(f"Task {args.id} not found.")
 
+    elif args.command == "export":
+        try:
+            manager.export_tasks_to_csv(args.filename)
+            print(f"Tasks exported to {args.filename}")
+        except Exception as e:
+            print(f"Error exporting tasks: {e}")
+
     else:
         parser.print_help()
+
+if __name__ == "__main__":
+    main("tasks.json")

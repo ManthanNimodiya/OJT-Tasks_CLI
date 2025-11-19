@@ -2,11 +2,30 @@ from typing import List, Optional
 import datetime
 from .models import Task
 from .storage import Storage
+import csv
 
 class TaskManager:
     def __init__(self, storage: Storage):
         self.storage = storage
         self.tasks = self.storage.load_tasks()
+
+    def export_tasks_to_csv(self, filename: str):
+        with open(filename, mode='w', newline='', encoding='utf-8') as file:
+            writer = csv.writer(file)
+            writer.writerow(["ID", "Title", "Status", "Priority", "Project", "Recurrence", "Relist Count", "Created At", "Completed At", "Due Date"])
+            for task in self.tasks:
+                writer.writerow([
+                    task.id,
+                    task.title,
+                    task.status,
+                    task.priority,
+                    task.project if task.project else "",
+                    task.recurrence if task.recurrence else "",
+                    task.relist_count,
+                    task.created_at,
+                    task.completed_at if task.completed_at else "",
+                    task.due_date if task.due_date else ""
+                ])
 
     def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None, due_date: Optional[str] = None) -> Task:
         new_id = 1
