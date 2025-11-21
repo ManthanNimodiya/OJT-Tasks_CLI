@@ -4,6 +4,12 @@ from .manager import TaskManager
 from .storage import Storage
 
 def main(storage_path: str):
+    """
+    The main entry point for the Task CLI application.
+
+    Args:
+        storage_path (str): The path to the JSON file where tasks are stored.
+    """
     storage = Storage(storage_path)
     manager = TaskManager(storage)
 
