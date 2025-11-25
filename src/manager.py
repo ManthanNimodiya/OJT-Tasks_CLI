@@ -18,6 +18,21 @@ class TaskManager:
         self.storage = storage
         self.tasks = self.storage.load_tasks()
 
+    def get_task_by_id(self, task_id: int) -> Optional[Task]:
+        """
+        Retrieves a task by its ID.
+
+        Args:
+            task_id (int): The ID of the task to retrieve.
+
+        Returns:
+            Optional[Task]: The task if found, else None.
+        """
+        for task in self.tasks:
+            if task.id == task_id:
+                return task
+        return None
+
     def export_tasks_to_csv(self, filename: str):
         """
         Exports all tasks to a CSV file.
