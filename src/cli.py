@@ -86,6 +86,16 @@ def main(storage_path: str):
             print(f"Task {args.id} not found.")
 
     elif args.command == "delete":
+        # Check if task is pending before deleting
+        tasks = manager.list_tasks()
+        task_to_delete = next((t for t in tasks if t.id == args.id), None)
+        
+        if task_to_delete and task_to_delete.status == "pending":
+            confirm = input(f"Task {args.id} is pending. Are you sure you want to delete it? (y/n): ")
+            if confirm.lower() != 'y':
+                print("Deletion cancelled.")
+                return
+
         if manager.delete_task(args.id):
             print(f"Task {args.id} deleted.")
         else:
