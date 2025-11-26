@@ -33,6 +33,15 @@ class TaskManager:
                 return task
         return None
 
+    def get_active_tasks(self) -> List[Task]:
+        """
+        Retrieves all tasks that are not marked as 'done'.
+
+        Returns:
+            List[Task]: A list of active tasks.
+        """
+        return [task for task in self.tasks if task.status != "done"]
+
     def export_tasks_to_csv(self, filename: str):
         """
         Exports all tasks to a CSV file.
