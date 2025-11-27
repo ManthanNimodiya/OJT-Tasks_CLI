@@ -1,0 +1,115 @@
+Metadata-Version: 2.4
+Name: ojt-task-cli
+Version: 0.0.5
+Summary: A simple command-line task manager
+Author-email: Manthan Nimodiya <manthannimodiya989898@gmail.com>
+Project-URL: Homepage, https://github.com/ManthanNimodiya/OJT-Tasks_CLI
+Keywords: task,cli,manager,productivity,todo
+Classifier: Programming Language :: Python :: 3
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Requires-Python: >=3.7
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+
+# Task CLI
+
+A command-line interface (CLI) tool for managing tasks with support for projects, priorities, and persistence.
+
+[![PyPI version](https://badge.fury.io/py/ojt-task-cli.svg)](https://badge.fury.io/py/ojt-task-cli)
+
+## Installation
+
+Install the package from PyPI:
+
+```bash
+pip install ojt-task-cli
+```
+
+## Features
+- **Add Tasks**: Create new tasks with optional project and priority.
+- **List Tasks**: View all tasks, or filter by project/priority.
+- **Complete Tasks**: Mark tasks as done.
+- **Delete Tasks**: Remove tasks permanently.
+- **Export Tasks**: Export tasks to a CSV file.
+- **Persistence**: Tasks are saved to a JSON file.
+- **Sorting**: Tasks are automatically sorted by Date, Priority, and Time.
+- **Export**: Export tasks to a CSV file.
+
+## Usage
+
+### Add Task
+Create a new task.
+```bash
+# Simple
+task-cli add "Buy milk"
+
+# With Project and Priority
+task-cli add "Finish Report" --project Work --priority High
+
+# Recurring Task (Daily, Weekly, etc.)
+task-cli add "Daily Standup" --recurrence daily
+
+# With Due Date
+task-cli add "Submit Assignment" --due-date 2023-12-31
+```
+
+### List Tasks
+View tasks with optional filters.
+```bash
+# List all
+task-cli list
+
+# Filter by Project
+task-cli list --project Work
+
+# Filter by Priority
+task-cli list --priority High
+```
+
+### Update Task
+Modify an existing task.
+```bash
+# Update Title and Priority
+task-cli update <id> --title "New Title" --priority Low
+
+# Update Recurrence
+task-cli update <id> --recurrence weekly
+
+# Move from Done -> Pending
+task-cli update <id> --status pending
+
+# Update Due Date
+task-cli update <id> --due-date 2024-01-15
+```
+
+### Complete Task
+Mark a task as done.
+```bash
+task-cli done <id>
+```
+*Note: If the task is recurring, a new pending task will be automatically created.*
+
+### Delete Task
+Permanently remove a task.
+```bash
+task-cli delete <id>
+```
+
+### Export Tasks
+Export all tasks to a CSV file.
+```bash
+task-cli export <path_to_csv>
+# Example
+task-cli export tasks.csv
+```
+
+
+
+
+## Running Tests
+```bash
+python3 -m unittest discover tests
+```

@@ -66,7 +66,7 @@ class TaskManager:
                     task.due_date if task.due_date else ""
                 ])
 
-    def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None, due_date: Optional[str] = None) -> Task:
+    def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None, due_date: Optional[str] = None, allow_duplicates: bool = False) -> Task:
         """
         Adds a new task.
 
@@ -76,10 +76,17 @@ class TaskManager:
             priority (str): The priority level (default: "Medium").
             recurrence (Optional[str]): Recurrence pattern.
             due_date (Optional[str]): Due date in YYYY-MM-DD format.
+            allow_duplicates (bool): Whether to allow duplicate tasks.
 
         Returns:
             Task: The newly created task.
         """
+        # Check for duplicates
+        if not allow_duplicates:
+            for task in self.tasks:
+                if task.title == title and task.status != "done":
+                    raise ValueError("Task already exists")
+
         new_id = 1
         if self.tasks:
             new_id = max(t.id for t in self.tasks) + 1

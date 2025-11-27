@@ -54,8 +54,19 @@ def main(storage_path: str):
     args = parser.parse_args()
 
     if args.command == "add":
-        task = manager.add_task(args.title, args.project, args.priority, args.recurrence, args.due_date)
-        print(f"Task added: {task.id} - {task.title}")
+        try:
+            task = manager.add_task(args.title, args.project, args.priority, args.recurrence, args.due_date)
+            print(f"Task added: {task.id} - {task.title}")
+        except ValueError as e:
+            if str(e) == "Task already exists":
+                confirm = input(f"Task '{args.title}' already exists. Do you want to add it anyway? (y/n): ")
+                if confirm.lower() == 'y':
+                    task = manager.add_task(args.title, args.project, args.priority, args.recurrence, args.due_date, allow_duplicates=True)
+                    print(f"Task added: {task.id} - {task.title}")
+                else:
+                    print("Operation cancelled.")
+            else:
+                print(f"Error: {e}")
     
     elif args.command == "list":
         tasks = manager.list_tasks(args.project, args.priority)
