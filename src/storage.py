@@ -48,5 +48,9 @@ class Storage:
         dirname = os.path.dirname(self.file_path)
         if dirname:
             os.makedirs(dirname, exist_ok=True)
-        with open(self.file_path, 'w') as f:
+        temp_file_path = f"{self.file_path}.tmp"
+        with open(temp_file_path, 'w') as f:
             json.dump(data, f, indent=4)
+        
+        # Atomic replace
+        os.replace(temp_file_path, self.file_path)
