@@ -39,7 +39,10 @@ class Storage:
 
     def save_tasks(self, tasks: List[Task]):
         """
-        Saves a list of tasks to the JSON file.
+        Saves a list of tasks to the JSON file atomically.
+        
+        It writes to a temporary file first, then renames it to the target file.
+        This prevents data corruption if the write fails midway.
 
         Args:
             tasks (List[Task]): The list of Task objects to save.
@@ -48,9 +51,18 @@ class Storage:
         dirname = os.path.dirname(self.file_path)
         if dirname:
             os.makedirs(dirname, exist_ok=True)
-        temp_file_path = f"{self.file_path}.tmp"
-        with open(temp_file_path, 'w') as f:
-            json.dump(data, f, indent=4)
-        
-        # Atomic replace
-        os.replace(temp_file_path, self.file_path)
+        # Atomic write: write to temp file then rename
+        import tempfile
+        try:
+            # Create a temp file in the same directory to ensure atomic rename works across filesystems
+            with tempfile.NamedTemporaryFile('w', dir=dirname if dirname else '.', delete=False, encoding='utf-8') as tf:
+                json.dump(data, tf, indent=4)
+                temp_name = tf.name
+            
+            # Atomic replacement
+            os.replace(temp_name, self.file_path)
+        except Exception as e:
+            # Clean up temp file if something went wrong before rename
+            if 'temp_name' in locals() and os.path.exists(temp_name):
+                os.remove(temp_name)
+            raise e

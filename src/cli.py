@@ -1,15 +1,18 @@
+import os
 import argparse
-import sys
 from .manager import TaskManager
 from .storage import Storage
 
-def main(storage_path: str):
+def main(storage_path: str = None):
     """
     The main entry point for the Task CLI application.
 
     Args:
         storage_path (str): The path to the JSON file where tasks are stored.
     """
+    if storage_path is None:
+        storage_path = os.path.join(os.path.expanduser("~"), ".ojt-tasks.json")
+        
     storage = Storage(storage_path)
     manager = TaskManager(storage)
 
@@ -73,13 +76,13 @@ def main(storage_path: str):
         if not tasks:
             print("No tasks found.")
         else:
-            print(f"{'ID':<5} {'Title':<30} {'Project':<15} {'Priority':<10} {'Status':<10} {'Recurrence':<12} {'Due Date':<12} {'Relist':<6}")
-            print("-" * 115)
+            print(f"{'ID':<5} {'Title':<30} {'Project':<15} {'Priority':<10} {'Status':<10} {'Recurrence':<12} {'Due Date':<12}")
+            print("-" * 108)
             for task in tasks:
                 project = task.project if task.project else ""
                 recurrence = task.recurrence if task.recurrence else ""
                 due_date = task.due_date if task.due_date else ""
-                print(f"{task.id:<5} {task.title[:28]:<30} {project[:13]:<15} {task.priority:<10} {task.status:<10} {recurrence[:10]:<12} {due_date:<12} {task.relist_count:<6}")
+                print(f"{task.id:<5} {task.title[:28]:<30} {project[:13]:<15} {task.priority:<10} {task.status:<10} {recurrence[:10]:<12} {due_date:<12}")
 
     elif args.command == "update":
         task = manager.update_task(

@@ -51,7 +51,7 @@ class TaskManager:
         """
         with open(filename, mode='w', newline='', encoding='utf-8') as file:
             writer = csv.writer(file)
-            writer.writerow(["ID", "Title", "Status", "Priority", "Project", "Recurrence", "Relist Count", "Created At", "Completed At", "Due Date"])
+            writer.writerow(["ID", "Title", "Status", "Priority", "Project", "Recurrence", "Due Date", "Created At", "Completed At"])
             for task in self.tasks:
                 writer.writerow([
                     task.id,
@@ -60,10 +60,9 @@ class TaskManager:
                     task.priority,
                     task.project if task.project else "",
                     task.recurrence if task.recurrence else "",
-                    task.relist_count,
+                    task.due_date if task.due_date else "",
                     task.created_at,
-                    task.completed_at if task.completed_at else "",
-                    task.due_date if task.due_date else ""
+                    task.completed_at if task.completed_at else ""
                 ])
 
     def add_task(self, title: str, project: Optional[str] = None, priority: str = "Medium", recurrence: Optional[str] = None, due_date: Optional[str] = None, allow_duplicates: bool = False) -> Task:
@@ -141,9 +140,8 @@ class TaskManager:
                 if recurrence:
                     task.recurrence = recurrence
                 if status:
-                    # Relist tracking: if changing from done to pending
+                    # if changing from done to pending, clear completed_at
                     if task.status == "done" and status == "pending":
-                        task.relist_count += 1
                         task.completed_at = None
                     task.status = status
                 if due_date:

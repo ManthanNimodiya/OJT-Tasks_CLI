@@ -14,7 +14,6 @@ class Task:
         priority (str): Priority level of the task (default: "Medium").
         project (Optional[str]): The project this task belongs to.
         recurrence (Optional[str]): Recurrence pattern (e.g., "daily", "weekly").
-        relist_count (int): Number of times the task has been relisted.
         created_at (str): ISO format timestamp of when the task was created.
         completed_at (Optional[str]): ISO format timestamp of when the task was completed.
         due_date (Optional[str]): Due date for the task in YYYY-MM-DD format.
@@ -25,7 +24,6 @@ class Task:
     priority: str = "Medium"
     project: Optional[str] = None
     recurrence: Optional[str] = None
-    relist_count: int = 0
     created_at: str = "" 
     completed_at: Optional[str] = None
     due_date: Optional[str] = None

@@ -86,5 +86,5 @@ python3 task.py export my_tasks.csv
 
 ## Running Tests
 ```bash
-python -m unittest discover tests
+python3 -m unittest discover tests
 ```

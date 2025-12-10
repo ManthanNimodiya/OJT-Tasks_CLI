@@ -4,3 +4,12 @@ __pycache__/
 data/
 *.json
 *.csv
+
+# Build artifacts
+dist/
+build/
+*.egg-info/
+
+# Virtual Environment
+venv/
+.venv/
